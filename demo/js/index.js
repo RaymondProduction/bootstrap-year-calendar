@@ -58,6 +58,7 @@ function saveEvent() {
 $(function() {
   var currentYear = new Date().getFullYear();
   $('#calendar').calendar({
+    style: 'background',
     enableContextMenu: true,
     enableRangeSelection: true,
     contextMenuItems: [{
