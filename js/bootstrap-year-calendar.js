@@ -179,128 +179,99 @@
 			
 			this.element.append(header);
 		},
+		_month: function (m, dates, monthsDiv) {
+			/* Container */
+			var monthDiv = $(document.createElement('div'));
+			monthDiv.addClass('month-container');
+			monthDiv.data('month-id', m);
+			var firstDate = new Date(this.options.startYear, m, 1);
+			var table = $(document.createElement('table'));
+			table.addClass('month');
+			/* Month header */
+			var thead = $(document.createElement('thead'));
+			var titleRow = $(document.createElement('tr'));
+			var titleCell = $(document.createElement('th'));
+			titleCell.addClass('month-title');
+			titleCell.attr('colspan', this.options.displayWeekNumber ? 8 : 7);
+			titleCell.text(dates[this.options.language].months[m]);
+			titleRow.append(titleCell);
+			thead.append(titleRow);
+			var headerRow = $(document.createElement('tr'));
+			if (this.options.displayWeekNumber) {
+				var weekNumberCell = $(document.createElement('th'));
+				weekNumberCell.addClass('week-number');
+				weekNumberCell.text(dates[this.options.language].weekShort);
+				headerRow.append(weekNumberCell);
+			}
+			var weekStart = this.options.weekStart ? this.options.weekStart : dates[this.options.language].weekStart;
+			var d = weekStart;
+			do {
+				var headerCell = $(document.createElement('th'));
+				headerCell.addClass('day-header');
+				headerCell.text(dates[this.options.language].daysMin[d]);
+				if (this._isHidden(d)) {
+					headerCell.addClass('hidden');
+				}
+				headerRow.append(headerCell);
+				d++;
+				if (d >= 7)
+					d = 0;
+			} while (d != weekStart);
+			thead.append(headerRow);
+			table.append(thead);
+			/* Days */
+			var currentDate = new Date(firstDate.getTime());
+			var lastDate = new Date(this.options.startYear, m + 1, 0);
+			while (currentDate.getDay() != weekStart) {
+				currentDate.setDate(currentDate.getDate() - 1);
+			}
+			while (currentDate <= lastDate) {
+				var row = $(document.createElement('tr'));
+				if (this.options.displayWeekNumber) {
+					var weekNumberCell = $(document.createElement('td'));
+					weekNumberCell.addClass('week-number');
+					weekNumberCell.text(this.getWeekNumber(currentDate));
+					row.append(weekNumberCell);
+				}
+				do {
+					var cell = $(document.createElement('td'));
+					cell.addClass('day');
+					if (this._isHidden(currentDate.getDay())) {
+						cell.addClass('hidden');
+					}
+					if (currentDate < firstDate) {
+						cell.addClass('old');
+					}
+					else if (currentDate > lastDate) {
+						cell.addClass('new');
+					}
+					else {
+						if (this._isDisabled(currentDate)) {
+							cell.addClass('disabled');
+						}
+						var cellContent = $(document.createElement('div'));
+						cellContent.addClass('day-content');
+						cellContent.text(currentDate.getDate());
+						cell.append(cellContent);
+						if (this.options.customDayRenderer) {
+							this.options.customDayRenderer(cellContent, currentDate);
+						}
+					}
+					row.append(cell);
+					currentDate.setDate(currentDate.getDate() + 1);
+				} while (currentDate.getDay() != weekStart);
+				table.append(row);
+			}
+			monthDiv.append(table);
+			monthsDiv.append(monthDiv);
+		},
+		
 		_renderBody: function() {
 			var monthsDiv = $(document.createElement('div'));
 			monthsDiv.addClass('months-container');
 			
 			for(var m = 0; m < 12; m++) {
-				/* Container */
-				var monthDiv = $(document.createElement('div'));
-				monthDiv.addClass('month-container');
-				monthDiv.data('month-id', m);
-				
-				var firstDate = new Date(this.options.startYear, m, 1);
-				
-				var table = $(document.createElement('table'));
-				table.addClass('month');
-				
-				/* Month header */
-				var thead = $(document.createElement('thead'));
-				
-				var titleRow = $(document.createElement('tr'));
-				
-				var titleCell = $(document.createElement('th'));
-				titleCell.addClass('month-title');
-				titleCell.attr('colspan', this.options.displayWeekNumber ? 8 : 7);
-				titleCell.text(dates[this.options.language].months[m]);
-				
-				titleRow.append(titleCell);
-				thead.append(titleRow);
-				
-				var headerRow = $(document.createElement('tr'));
-				
-				if(this.options.displayWeekNumber) {
-					var weekNumberCell = $(document.createElement('th'));
-					weekNumberCell.addClass('week-number');
-					weekNumberCell.text(dates[this.options.language].weekShort);
-					headerRow.append(weekNumberCell);
-				}
-				
-				var weekStart = this.options.weekStart ? this.options.weekStart : dates[this.options.language].weekStart;
-				var d = weekStart;
-				do
-				{
-					var headerCell = $(document.createElement('th'));
-					headerCell.addClass('day-header');
-					headerCell.text(dates[this.options.language].daysMin[d]);
-					
-					if(this._isHidden(d)) {
-						headerCell.addClass('hidden');
-					}
-					
-					headerRow.append(headerCell);
-					
-					d++;
-					if(d >= 7)
-						d = 0;
-				}
-				while(d != weekStart)
-				
-				thead.append(headerRow);
-				table.append(thead);
-				
-				/* Days */
-				var currentDate = new Date(firstDate.getTime());
-				var lastDate = new Date(this.options.startYear, m + 1, 0);
-				
-				while(currentDate.getDay() != weekStart)
-				{
-					currentDate.setDate(currentDate.getDate() - 1);
-				}
-				
-				while(currentDate <= lastDate)
-				{
-					var row = $(document.createElement('tr'));
-					
-					if(this.options.displayWeekNumber) {
-						var weekNumberCell = $(document.createElement('td'));
-						weekNumberCell.addClass('week-number');
-						weekNumberCell.text(this.getWeekNumber(currentDate));
-						row.append(weekNumberCell);
-					}
-				
-					do
-					{
-						var cell = $(document.createElement('td'));
-						cell.addClass('day');
-						
-						if(this._isHidden(currentDate.getDay())) {
-							cell.addClass('hidden');
-						}
-						
-						if(currentDate < firstDate) {
-							cell.addClass('old');
-						}
-						else if(currentDate > lastDate) {
-							cell.addClass('new');
-						}
-						else {
-							if(this._isDisabled(currentDate)) {
-								cell.addClass('disabled');
-							}
-						
-							var cellContent = $(document.createElement('div'));
-							cellContent.addClass('day-content');
-							cellContent.text(currentDate.getDate());
-							cell.append(cellContent);
-							
-							if(this.options.customDayRenderer) {
-								this.options.customDayRenderer(cellContent, currentDate);
-							}
-						}
-						
-						row.append(cell);
-						
-						currentDate.setDate(currentDate.getDate() + 1);
-					}
-					while(currentDate.getDay() != weekStart)
-					
-					table.append(row);
-				}
-				
-				monthDiv.append(table);
-				
-				monthsDiv.append(monthDiv);
+				this._month(m, dates, monthsDiv);
 			}
 			
 			this.element.append(monthsDiv);
