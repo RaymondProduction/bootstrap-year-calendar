@@ -179,7 +179,7 @@
 			
 			this.element.append(header);
 		},
-		_month: function (m, dates, monthsDiv) {
+		_month: function (m, monthsDiv) {
 			/* Container */
 			var monthDiv = $(document.createElement('div'));
 			monthDiv.addClass('month-container');
@@ -271,7 +271,7 @@
 			monthsDiv.addClass('months-container');
 			
 			for(var m = 0; m < 12; m++) {
-				this._month(m, dates, monthsDiv);
+				this._month(m, monthsDiv);
 			}
 			
 			this.element.append(monthsDiv);
