@@ -179,12 +179,12 @@
 			
 			this.element.append(header);
 		},
-		_month: function (m, monthsDiv) {
+		_month: function (m, monthsDiv, startYear) {
 			/* Container */
 			var monthDiv = $(document.createElement('div'));
 			monthDiv.addClass('month-container');
 			monthDiv.data('month-id', m);
-			var firstDate = new Date(this.options.startYear, m, 1);
+			var firstDate = new Date(startYear, m, 1);
 			var table = $(document.createElement('table'));
 			table.addClass('month');
 			/* Month header */
@@ -221,7 +221,7 @@
 			table.append(thead);
 			/* Days */
 			var currentDate = new Date(firstDate.getTime());
-			var lastDate = new Date(this.options.startYear, m + 1, 0);
+			var lastDate = new Date(startYear, m + 1, 0);
 			while (currentDate.getDay() != weekStart) {
 				currentDate.setDate(currentDate.getDate() - 1);
 			}
@@ -270,8 +270,11 @@
 			var monthsDiv = $(document.createElement('div'));
 			monthsDiv.addClass('months-container');
 			
-			for(var m = 0; m < 12; m++) {
-				this._month(m, monthsDiv);
+			for(var m = 8; m < 12; m++) {
+				this._month(m, monthsDiv, this.options.startYear);
+			}
+			for(var m = 0; m < 5; m++) {
+				this._month(m, monthsDiv, this.options.startYear + 1);
 			}
 			
 			this.element.append(monthsDiv);
