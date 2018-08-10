@@ -117,7 +117,7 @@
 			
 			var prev2YearDiv = $(document.createElement('th'));
 			prev2YearDiv.addClass('year-title year-neighbor2 hidden-sm hidden-xs');
-			prev2YearDiv.text(this.options.startYear - 2);
+			prev2YearDiv.text((this.options.startYear - 2) + '/' + (this.options.startYear - 1));
 			
 			if(this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 2, 11, 31)) {
 				prev2YearDiv.addClass('disabled');
@@ -127,7 +127,7 @@
 			
 			var prevYearDiv = $(document.createElement('th'));
 			prevYearDiv.addClass('year-title year-neighbor hidden-xs');
-			prevYearDiv.text(this.options.startYear - 1);
+			prevYearDiv.text((this.options.startYear - 1) + '/' + (this.options.startYear));
 			
 			if(this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
 				prevYearDiv.addClass('disabled');
@@ -137,13 +137,13 @@
 			
 			var yearDiv = $(document.createElement('th'));
 			yearDiv.addClass('year-title');
-			yearDiv.text(this.options.startYear);
+			yearDiv.text((this.options.startYear) + '/' + (this.options.startYear + 1));
 			
 			headerTable.append(yearDiv);
 			
 			var nextYearDiv = $(document.createElement('th'));
 			nextYearDiv.addClass('year-title year-neighbor hidden-xs');
-			nextYearDiv.text(this.options.startYear + 1);
+			nextYearDiv.text((this.options.startYear + 1) + '/' + (this.options.startYear + 2));
 			
 			if(this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
 				nextYearDiv.addClass('disabled');
@@ -153,7 +153,7 @@
 			
 			var next2YearDiv = $(document.createElement('th'));
 			next2YearDiv.addClass('year-title year-neighbor2 hidden-sm hidden-xs');
-			next2YearDiv.text(this.options.startYear + 2);
+			next2YearDiv.text((this.options.startYear + 2) + '/' + (this.options.startYear + 3));
 			
 			if(this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 2, 0, 1)) {
 				next2YearDiv.addClass('disabled');
